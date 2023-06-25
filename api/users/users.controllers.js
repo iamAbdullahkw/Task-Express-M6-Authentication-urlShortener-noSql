@@ -6,6 +6,7 @@ dotenv.config();
 
 const hashPassword = async (password) => {
   const saltRounds = 10;
+  console.log(saltRounds, password);
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   return hashedPassword;
 };
@@ -30,16 +31,16 @@ exports.signup = async (req, res, next) => {
     res.status(201).json(token);
   } catch (err) {
     console.log(err.message);
-    res.status(500).json("Server Error");
+    res.status(500).json(err.message);
   }
 };
 
 exports.signin = async (req, res) => {
   try {
-    const token = createToken(req.user);
+    const token = generateToken(req.user);
     res.status(200).json({ token });
   } catch (err) {
-    res.status(500).json("Server Error");
+    res.status(500).json(err.message);
   }
 };
 

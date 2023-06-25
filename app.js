@@ -4,7 +4,7 @@ const app = express();
 const urlRoutes = require("./api/urls/urls.routes");
 const userRoutes = require("./api/users/users.routes");
 const passport = require("passport");
-const { localStrategy } = require("./middlewares/passport");
+const { localStrategy, jwtStrategy } = require("./middlewares/passport");
 
 connectDb();
 app.use(express.json());
@@ -12,6 +12,11 @@ app.use(passport.initialize());
 passport.use(localStrategy);
 app.use("/urls", urlRoutes);
 app.use(userRoutes);
+
+// Passport
+app.use(passport.initialize());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
